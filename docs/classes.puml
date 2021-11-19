@@ -1,0 +1,65 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+
+class InventoryManagementApplicationController implements Initializable{
+'attributes
+-descriptionTextBox : TextField
+-dueDateInput : TextField
+-titleName : TextField
+-todolistView : ListView<?>
+
+'methods
++initialize(URL location, ResourceBundle resources)
++isDescriptionDuplicate(String text) : boolean
++validSerialNumberEntry(String value) : boolean
+-isSerialNumberDuplicate(String text) : boolean
++displayErrorMessage(String message)
++addItemClicked(ActionEvent event)
++loadClicked(ActionEvent event)
++saveClicked(ActionEvent event)
++removeItemClicked(ActionEvent event)
++clearAllClicked(ActionEvent actionEvent)
++descriptionEditTable(TableColumn.CellEditEvent<Item, String> itemStringCellEditEvent)
++dueDateEditTable(TableColumn.CellEditEvent<Item, String> itemStringCellEditEvent)
++sortStatusColumn(String newValue, String oldValue)
+
+
+}
+
+class InventoryManagementApplication extends javafx.application.Application {
++static void main(String[] args)
++start(Stage stage) throws Exception
+}
+
+class FileHandler {
+'methods
++{static}saveList(List<Item> listItems, File file, List<String> extensions) throws IOException
++{static}loadList(File file, List<String> extensions) throws  ParseException, IOException : List<Item>
++{static}saveTsvFile(List<Item> listItems, File file)
++{static}saveHtmlList(List<Item> listItems, File file) throws IOException
++{static}saveJsonList(List<Item> listItems, File file) throws IOException
+-{static}generateHtmlRow(Item item) : String
++{static}loadTsvList(File file) throws FileNotFoundException, ParseException List<Item>
++{static}loadHtmlList(File file) throws IOException : List<Item>
++{static}loadJsonList(File file) : List<Item>
+}
+
+class Item {
+'attributes
+-{static} final SERIAL_FORMAT : Pattern
+-{static} final VALUE_FORMAT : Pattern
+-name : SimpleStringProperty
+-value : SimpleStringProperty
+-serialNumber : SimpleStringProperty
+
+'methods
++getValue() : String
++setValue(String value) throws IllegalArgumentException
++getName() : String
++setName(String name)
++setSerialNumber(String serialNumber) throws IllegalArgumentException
++getSerialNumber() : String
+}
+
+@enduml
