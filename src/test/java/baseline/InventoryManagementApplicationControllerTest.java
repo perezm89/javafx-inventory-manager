@@ -12,22 +12,34 @@ class InventoryManagementApplicationControllerTest {
 
     @Test
     void validSerialNumberEntry() {
-        //instantiate a InventoryManagementApplicationController class
-        //hardcode some data
-        //pass to assert method
+        InventoryManagementApplicationController app = new InventoryManagementApplicationController();
+        String valid = "a-xxx-xxx-xxx";
+        String inValid = "A-s#d-dff-ggg";
+
+        assertFalse(app.validSerialNumberEntry(inValid));
+        assertTrue(app.validSerialNumberEntry(valid));
     }
 
     @Test
     void validNameEntry() {
-        //instantiate a InventoryManagementApplicationController class
-        //hardcode some data
-        //pass to assert method
+        InventoryManagementApplicationController app = new InventoryManagementApplicationController();
+        int inValid = 1025;
+        int valid = 25;
+
+        assertFalse(app.validNameEntry(inValid));
+        assertTrue(app.validNameEntry(valid));
     }
 
     @Test
     void validValueEntry() {
-        //instantiate a InventoryManagementApplicationController class
-        //hardcode some data
-        //pass to assert method
+        InventoryManagementApplicationController app = new InventoryManagementApplicationController();
+        String decimalPlaces = "12345.00";
+        String currencyFormat = "$100.00";
+        String negativeNumbers = "-262.23";
+
+        assertTrue(app.validValueEntry(decimalPlaces));
+        assertTrue(app.validValueEntry(currencyFormat));
+        assertFalse(app.validValueEntry(negativeNumbers));
+
     }
 }

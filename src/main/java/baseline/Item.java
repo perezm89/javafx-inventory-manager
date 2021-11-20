@@ -19,53 +19,51 @@ public class Item {
     private SimpleStringProperty serialNumber;
 
     public String getValue() {
-       //check if value is null
-        //if so initialize to new SimpleStringProperty empty quotes
-
-        //return value
-        return null;
+        if(value == null) {
+            this.value = new SimpleStringProperty("");
+        }
+        return value.get();
     }
 
     public void setValue(String value) throws IllegalArgumentException {
-        //create a Matcher variable
-        //call the matcher function within VALUE_FORMAT and pass value
-        //set this equal to matcher type created
+        Matcher matchString = VALUE_FORMAT.matcher(value);
 
-        //check if matcher matches
-        //if so parse to double
-        //create a DecimalFormat instance and format it appropriately
-        //then set value to a new instances of SimpleStringProperty while passing the parsed value to it
-        //else throw IllegalArgumentException
+        if(matchString.matches()) {
+            double doubleValue =  Double.parseDouble(matchString.group(1));
+            DecimalFormat decFormat = new DecimalFormat("$0.00");
+
+            this.value = new SimpleStringProperty(decFormat.format(doubleValue));
+        }
+        else {
+            throw new IllegalArgumentException("Value must be expressed as a whole number or decimal rounded to two decimal places");
+        }
     }
 
     public String getName() {
-        //check if value is null
-        //if so initialize to new SimpleStringProperty empty quotes
-
-        //return name
-        return null;
+        if(name == null) {
+            this.name = new SimpleStringProperty("");
+        }
+        return name.get();
     }
 
     public void setName(String name) {
-        //set name to SimpleStringProperty while passing name variable to it
+        this.name = new SimpleStringProperty(name);
     }
 
     public void setSerialNumber(String serialNumber) throws IllegalArgumentException {
-        //create a Matcher variable
-        //call the matcher function within SERIAL_FORMAT and pass value
-        //set this equal to matcher type created
-
-        //check if matcher matches
-        //then set SerialNumber to a new instances of SimpleStringProperty serialNumber variable to it
-        //else throw IllegalArgumentException
-
+        Matcher matchString = SERIAL_FORMAT.matcher(serialNumber);
+        if(matchString.matches()) {
+            this.serialNumber = new SimpleStringProperty(serialNumber);
+        }
+        else {
+            throw new IllegalArgumentException("serial number must be in the format: A-XXX-XXX-XXX");
+        }
     }
 
     public String getSerialNumber() {
-        //check if value is null
-        //if so initialize to new SimpleStringProperty empty quotes
-
-        //return serialNumber
-        return null;
+        if(serialNumber == null) {
+            this.serialNumber= new SimpleStringProperty("");
+        }
+        return serialNumber.get();
     }
 }

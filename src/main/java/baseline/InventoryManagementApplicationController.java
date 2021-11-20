@@ -44,7 +44,7 @@ public class InventoryManagementApplicationController implements Initializable {
     private TableView<Item> todoTable;
 
     @FXML
-    private Label errorMessage;
+    public Label errorMessage;
 
     @FXML
     private TableColumn<Item, String> serialNumberColumn;
@@ -59,203 +59,288 @@ public class InventoryManagementApplicationController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        //call the addListener function to searchSerialNumberListInput
-        // Use lambda expression to changeListener in searchSerialNumberColumn pass the oldValue, newValue as parameters.
+        searchSerialNumberListInput.textProperty().addListener((observable, oldValue, newValue) -> searchSerialNumbersColumn(newValue, oldValue));
+        searchNameListInput.textProperty().addListener((observable, oldValue, newValue) -> searchNameColumn(newValue, oldValue));
 
-        //call the addListener function to searchNameListInput
-        // Use lambda expression to changeListener in searchNameColumn pass the oldValue, newValue as parameters.
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("Name"));
+        nameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
 
-        //call the setCellValueFactory function from nameColumn
-        //create a new PropertyValueFactory
-        //call the setCellFactory function from nameColumn
+        valueColumn.setCellValueFactory(new PropertyValueFactory<>("Value"));
+        valueColumn.setCellFactory(TextFieldTableCell.forTableColumn());
 
-        //call the setCellValueFactory function from valueColumn
-        //create a new PropertyValueFactory
-        //call the setCellFactory function from valueColumn
+        serialNumberColumn.setCellValueFactory(new PropertyValueFactory<>("SerialNumber"));
+        serialNumberColumn.setCellFactory(TextFieldTableCell.forTableColumn());
 
-        //call the setCellValueFactory function from serialNumberColumn
-        //create a new PropertyValueFactory
-        //call the setCellFactory function from serialNumberColumn
-
-        //set todotable's edit table to true.
-        //pass myList as to todoTable's setItems
+        todoTable.setEditable(true);
+        todoTable.setItems(myList);
     }
 
     public boolean validSerialNumberEntry(String value) {
 
-        //check if value is empty
-        //if so display message to GUI and return false
+        if(value.isEmpty()) {
+            //displayErrorMessage("Must enter a serial number");
+            return false;
+        }
+        Item item = new Item();
 
-        //create a new Item instance
+        try {
+            item.setSerialNumber(value);
+        } catch (IllegalArgumentException e) {
+            //displayErrorMessage(e.getMessage());
+            return false;
+        }
 
-        //create a try catch block to catch illArgument exception from Item class
-        //If caught return false
+        if(isSerialNumberDuplicate(value)) {
+            //displayErrorMessage("Serial number already exists inventory");
+            return false;
+        }
 
-        //call the isSerialNumberDuplicate
-        //if it is duplicate return false
-
-
-        //else return true
         return true;
     }
 
     private boolean isSerialNumberDuplicate(String text) {
 
-        //verify myList is not empty
-        //loop each item in myList
-        //compare to see if any items match
-        //if so return true
-
-        //else return false
+        if(!myList.isEmpty()) {
+            for (Item value : myList) {
+                if (text.equalsIgnoreCase(value.getSerialNumber())) {
+                    return true;
+                }
+            }
+        }
         return false;
     }
 
     public boolean validNameEntry(int length) {
 
-        //check to see if length is between 2 and 256
-        //if so return true
-        //else return false
-
-        return false;
-
+        if (length >= 2 && length <= 256) {
+            return true;
+        }
+        else {
+            //displayErrorMessage("Name must be between 2 and 256 characters in length");
+            return false;
+        }
     }
 
     public boolean validValueEntry(String value) {
 
-        //check if value is empty
-        //if so return false
+        if(value.isEmpty()) {
+            //displayErrorMessage("Must enter a value");
+            return false;
+        }
+        double testParsedDouble;
 
-        //create a double variable
+        if(parseToDoubleCheck(value)) {
+            testParsedDouble  =  Double.parseDouble(value);
+            if (testParsedDouble < 0) {
+                //displayErrorMessage("Value must be number greater than or equal to 0");
+                return false;
+            }
+        }
 
-        //call the parseToDoubleCheck function
-        //if it is true parse the and store in variable created
-        //also if true check to make sure the value is a positive number
-        //if not return false
-
-        //else return true
         return true;
     }
 
     private boolean parseToDoubleCheck(String value) {
 
-        //create a try and catch block to parse a double
-        //return false if caught
+        try {
+            Double.parseDouble(value);
 
-        //else return true
+        }catch(IllegalArgumentException ex) {
+            //displayErrorMessage("Value must be expressed as a whole number or decimal rounded to two decimal places");
+            return false;
+        }
+
         return true;
     }
 
     public void displayErrorMessage(String message)
     {
-        //set controller label errorMessage to message
-        //set the text to color red
+        errorMessage.setText(message);
+        errorMessage.setTextFill(Color.RED);
     }
 
     @FXML
     void addItemClicked(ActionEvent event) {
+        try {
+            Item newItem = null;
+            String value = valueText.getText().trim();
+            String serialNumber = serialNumberText.getText().trim();
+            //make sure user can create up-to 1024 items
+            //1 List is already created prior to entering function
+            if (myList.size() < 1024
+                    && validNameEntry(nameText.getText().trim().length())
+                    && validValueEntry(value)
+                    && validSerialNumberEntry(serialNumber)) {
+                newItem = new Item();
+                newItem.setSerialNumber(serialNumber);
+                newItem.setName(nameText.getText().trim());
+                newItem.setValue((value));
+            }
+            if (newItem != null) {
+                myList.add(newItem);
+                todoTable.setItems(myList);
 
-        //place the whole function in a try and catch block
-        //create a new item instance
-        //create a checker to make sure myList doesn't exceed 1024
-        //call the validNameEntry,validValueEntry, and validSerialNumberEntry
-        //if they all return true call the set functions for all three
-
+                //clean up input controls
+                serialNumberText.setText("");
+                nameText.setText("");
+                valueText.setText("");
+                errorMessage.setText("");
+            }
+        }
+        catch (Exception ex) {
+            displayErrorMessage(ex.getMessage());
+        }
     }
 
     @FXML
     void loadClicked(ActionEvent event) {
+        errorMessage.setText("");
 
-        //create a filChooser
-        //call the function getExtensionFilters and create new ExtensionFilters for all three extensions
-        //create a stage and cast todotable's getScene method to it
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Tab separated Files", "*.txt"),
+                new FileChooser.ExtensionFilter("HTML Files", "*.html"),
+                new FileChooser.ExtensionFilter("JSON Files", "*.json"));
 
-        //create a file and set it equal to filechooser's showOpenDialog method and pass stage to it
+        Stage thisStage = (Stage) todoTable.getScene().getWindow();
 
-        //make sure file is not null
-        //make sure you create a try and catch block
+        File file = fileChooser.showOpenDialog(thisStage);
+        if (file != null) {
+            try {
+                List<String> extensions = fileChooser.getSelectedExtensionFilter().getExtensions();
+                List<Item> newList = FileHandler.loadList(file, extensions.get(0));
+                myList = FXCollections.observableArrayList(newList);
+                todoTable.setItems(myList);
 
+            }catch(FileNotFoundException e) {
+                displayErrorMessage("File not found");
+            }catch (ParseException e) {
+                displayErrorMessage(e.getMessage());
+            }catch (IOException ex) {
+                displayErrorMessage("IOException error");
+            }catch (IllegalArgumentException ex) {
+                displayErrorMessage("File is in wrong format");
+            }catch(IllegalStateException ie) {
+                displayErrorMessage("wrong file extension selected");
+            }catch(com.google.gson.JsonSyntaxException js) {
+                displayErrorMessage("File not in Json format");
+            }
+        }
     }
 
     @FXML
     void saveClicked(ActionEvent event) {
+        errorMessage.setText("");
 
-        //create a filChooser
-        //call the function getExtensionFilters and create new ExtensionFilters for all three extensions
-        //create a stage and cast todotable's getScene method to it
-        //create a file and set it equal to filechooser's showOpenDialog method and pass stage to it
-        //make sure file is not null
-        //make sure you create a try and catch block
+        FileChooser fileChooser = new FileChooser();
+
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Tab separated Files", "*.txt"),
+                new FileChooser.ExtensionFilter("HTML Files", "*.html"),
+                new FileChooser.ExtensionFilter("JSON Files", "*.json"));
+
+        Stage thisStage = (Stage) todoTable.getScene().getWindow();
+
+        File file = fileChooser.showSaveDialog(thisStage);
+        if (file != null ) {
+            try {
+                List<String> extensions = fileChooser.getSelectedExtensionFilter().getExtensions();
+                FileHandler.saveList(myList, file, extensions.get(0));
+
+            } catch (IOException e) {
+                displayErrorMessage("File not saved properly");
+            }
+
+        }
     }
 
     @FXML
     void removeItemClicked(ActionEvent event) {
-        //call myList's remove function
-        //refresh todotable by call its function
+        myList.remove(todoTable.getSelectionModel().getSelectedItem());
+        todoTable.refresh();
     }
 
     @FXML
     public void clearAllClicked(ActionEvent actionEvent) {
-        //call mylist's clear function
-        //reset the errorMessage
+        myList.clear();
+        errorMessage.setText("");
     }
 
     @FXML
     public void nameEditTable(TableColumn.CellEditEvent<Item, String> itemStringCellEditEvent) {
-        //create an Item
-        //call todoTable get item function and set it equal to created item
-        //call the length function from itemStringCellEditEvent
-        //pass the length to validNameEntry
-        //if true set the value
-        //else refresh no matter what outcome it is
+        errorMessage.setText("");
+        Item item = todoTable.getSelectionModel().getSelectedItem();
+        int length = itemStringCellEditEvent.getNewValue().length();
+
+        if(validNameEntry(length) ) {
+            item.setName(itemStringCellEditEvent.getNewValue());
+        }
+
+        todoTable.refresh();
     }
 
     @FXML
     public void valueEditTable(TableColumn.CellEditEvent<Item, String> itemStringCellEditEvent) {
-        //create an Item
-        //call todoTable get item function and set it equal to created item
+        errorMessage.setText("");
+        Item item = todoTable.getSelectionModel().getSelectedItem();
+        String value = itemStringCellEditEvent.getNewValue();
 
-        //create a try and catch block
-        //call the setValue from Item Class
-        //refresh todoTable
+        try{
+            item.setValue(value);
+        }
+        catch(IllegalArgumentException e){
+            displayErrorMessage(e.getMessage());
+        }
+
+        todoTable.refresh();
     }
 
     @FXML
     public void serialNumberEditTable(TableColumn.CellEditEvent<Item, String> itemStringCellEditEvent) {
-        //create an Item
-        //call todoTable get item function and set it equal to created item
+        errorMessage.setText("");
+        Item item = todoTable.getSelectionModel().getSelectedItem();
+        String value = itemStringCellEditEvent.getNewValue();
 
-        //call the validSerialNumberEntry
-        //if so set the value
-        //else refresh no matter what the outcome is
+        if(validSerialNumberEntry(value)) {
+            item.setSerialNumber(value);
+        }
+
+        todoTable.refresh();
     }
 
     public void searchSerialNumbersColumn(String newValue, String oldValue) {
-        //create an ObservableList of Item
-        //check to see if the controller searchSerialNumberListInput
-        //or if newValue's length is less than oldValue length
-        //if so pass myList to todoTable
-        //else set newValue to Uppercase
-        //loop through items in todoTable
-        //continuously call getSerialNumber
-        //store value in a variable
-        //check to see if it contains newValue
-        //if so add it to observableList
-        //then add that observable list to todoTable
+        ObservableList<Item>  sortedList = FXCollections.observableArrayList();
+        if(searchSerialNumberListInput == null || (newValue.length() < oldValue.length())) {
+            todoTable.setItems(myList);
+        }
+        else{
+            newValue = newValue.toUpperCase();
+            for (Item item: todoTable.getItems()) {
+                String searchSerialNumber = item.getSerialNumber();
+                if(searchSerialNumber.toUpperCase().contains(newValue)) {
+                    sortedList.add(item);
+                }
+            }
+            todoTable.setItems(sortedList);
+        }
 
     }
 
     public void searchNameColumn(String newValue, String oldValue) {
-        //create an ObservableList of Item
-        //check to see if the controller searchNameListInput
-        //or if newValue's length is less than oldValue length
-        //if so pass myList to todoTable
-        //else set newValue to Uppercase
-        //loop through items in todoTable
-        //continuously call getName
-        //store value in a variable
-        //check to see if it contains newValue
-        //if so add it to observableList
-        //then add that observable list to todoTable
+        ObservableList<Item> sortedList = FXCollections.observableArrayList();
+        if (searchNameListInput == null || (newValue.length() < oldValue.length())) {
+            todoTable.setItems(myList);
+        } else {
+            newValue = newValue.toUpperCase();
+            for (Item item : todoTable.getItems()) {
+                String searchName = item.getName();
+                if (searchName.toUpperCase().contains(newValue)) {
+                    sortedList.add(item);
+                }
+            }
+            todoTable.setItems(sortedList);
+        }
 
     }
+
 }
