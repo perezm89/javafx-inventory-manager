@@ -11,35 +11,58 @@ import static org.junit.jupiter.api.Assertions.*;
 class InventoryManagementApplicationControllerTest {
 
     @Test
-    void validSerialNumberEntry() {
+    void validSerialNumberEntryHelper() {
         InventoryManagementApplicationController app = new InventoryManagementApplicationController();
         String valid = "a-xxx-xxx-xxx";
-        String inValid = "A-s#d-dff-ggg";
+        String inValid = "A-sd@-dff-ggg";
 
-        assertFalse(app.validSerialNumberEntry(inValid));
-        assertTrue(app.validSerialNumberEntry(valid));
+        String result1 = app.validSerialNumberEntryHelper(valid);
+
+        String expected1 = "true";
+        assertEquals(expected1, result1);
+
+        String result2 = null;
+
+        try {
+            app.validSerialNumberEntryHelper(inValid);
+        } catch (IllegalArgumentException ignored) {
+            result2 = "errorMessage";
+        }
+
+        String expected2 = "errorMessage";
+        assertEquals(expected2,result2);
+
     }
 
     @Test
-    void validNameEntry() {
+    void validNameEntryHelper() {
         InventoryManagementApplicationController app = new InventoryManagementApplicationController();
         int inValid = 1025;
         int valid = 25;
 
-        assertFalse(app.validNameEntry(inValid));
-        assertTrue(app.validNameEntry(valid));
+        assertFalse(app.validNameEntryHelper(inValid));
+        assertTrue(app.validNameEntryHelper(valid));
     }
 
     @Test
-    void validValueEntry() {
+    void validValueEntryHelper() {
         InventoryManagementApplicationController app = new InventoryManagementApplicationController();
         String decimalPlaces = "12345.00";
         String currencyFormat = "$100.00";
         String negativeNumbers = "-262.23";
 
-        assertTrue(app.validValueEntry(decimalPlaces));
-        assertTrue(app.validValueEntry(currencyFormat));
-        assertFalse(app.validValueEntry(negativeNumbers));
+        String result1 = app.validValueEntryHelper(decimalPlaces);
+        String expected1 = "true";
+
+        String result2 = app.validValueEntryHelper(currencyFormat);
+        String expected2 = "true";
+
+        String result3 = app.validValueEntryHelper(negativeNumbers);
+        String expected3 = "Value must be number greater than or equal to 0";
+
+        assertEquals(expected1, result1);
+        assertEquals(expected2, result2);
+        assertEquals(expected3, result3);
 
     }
 }

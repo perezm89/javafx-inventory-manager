@@ -75,23 +75,31 @@ public class InventoryManagementApplicationController implements Initializable {
         todoTable.setItems(myList);
     }
 
-    public boolean validSerialNumberEntry(String value) {
-
+    public String validSerialNumberEntryHelper(String value) throws IllegalArgumentException{
+        //This function was created to separate testable logic from JavaFX controller object errorMessage
         if(value.isEmpty()) {
-            //displayErrorMessage("Must enter a serial number");
-            return false;
+            return "Must enter a serial number";
         }
         Item item = new Item();
 
-        try {
-            item.setSerialNumber(value);
-        } catch (IllegalArgumentException e) {
-            //displayErrorMessage(e.getMessage());
-            return false;
-        }
+        item.setSerialNumber(value);
 
         if(isSerialNumberDuplicate(value)) {
-            //displayErrorMessage("Serial number already exists inventory");
+            return "Serial number already exists inventory";
+        }
+       return "true";
+    }
+
+    public boolean validSerialNumberEntry(String value) {
+
+        try {
+           String message = validSerialNumberEntryHelper(value);
+           if(!message.equalsIgnoreCase("")) {
+               displayErrorMessage(message);
+               return false;
+           }
+        } catch (IllegalArgumentException e) {
+            displayErrorMessage(e.getMessage());
             return false;
         }
 
@@ -110,47 +118,57 @@ public class InventoryManagementApplicationController implements Initializable {
         return false;
     }
 
+    public boolean validNameEntryHelper(int length ) {
+        //This function was created to separate testable logic from JavaFX controller object errorMessage
+        return length >= 2 && length <= 256;
+    }
     public boolean validNameEntry(int length) {
-
-        if (length >= 2 && length <= 256) {
+        if (validNameEntryHelper(length)) {
             return true;
         }
         else {
-            //displayErrorMessage("Name must be between 2 and 256 characters in length");
+            displayErrorMessage("Name must be between 2 and 256 characters in length");
             return false;
         }
     }
-
-    public boolean validValueEntry(String value) {
-
+    public String validValueEntryHelper(String value) {
+        //This function was created to separate testable logic from JavaFX controller object errorMessage
         if(value.isEmpty()) {
-            //displayErrorMessage("Must enter a value");
-            return false;
+            return "Must enter a value";
         }
         double testParsedDouble;
+        String result = parseToDoubleCheck(value);
 
-        if(parseToDoubleCheck(value)) {
+        if(result.contentEquals("true")) {
             testParsedDouble  =  Double.parseDouble(value);
             if (testParsedDouble < 0) {
-                //displayErrorMessage("Value must be number greater than or equal to 0");
-                return false;
+                return "Value must be number greater than or equal to 0";
             }
         }
 
+        return "true";
+    }
+
+    public boolean validValueEntry(String value) {
+        String result = validValueEntryHelper(value);
+
+        if(!result.contentEquals("true")) {
+            displayErrorMessage(result);
+            return false;
+        }
         return true;
     }
 
-    private boolean parseToDoubleCheck(String value) {
+    private String parseToDoubleCheck(String value) {
 
         try {
             Double.parseDouble(value);
 
         }catch(IllegalArgumentException ex) {
-            //displayErrorMessage("Value must be expressed as a whole number or decimal rounded to two decimal places");
-            return false;
+            return "Value must be expressed as a whole number or decimal rounded to two decimal places";
         }
 
-        return true;
+        return "true";
     }
 
     public void displayErrorMessage(String message)
@@ -161,6 +179,7 @@ public class InventoryManagementApplicationController implements Initializable {
 
     @FXML
     void addItemClicked(ActionEvent event) {
+
         try {
             Item newItem = null;
             String value = valueText.getText().trim();
