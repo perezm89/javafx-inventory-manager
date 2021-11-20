@@ -10,9 +10,27 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class InventoryManagementApplicationControllerTest {
 
+    InventoryManagementApplicationController app = new InventoryManagementApplicationController();
+
+    @Test
+    void inventoryItemsControlCountHelper() {
+        int validSize = 25;
+        int inValidSize = 1025;
+
+        String result1 = app.inventoryItemsControlCountHelper(validSize);
+        String expected1 = "true";
+
+        String result2 = app.inventoryItemsControlCountHelper(inValidSize);
+        String expected2 = "Items must not exceed 1024";
+
+        assertEquals(expected1, result1);
+        assertEquals(expected2, result2);
+
+    }
+
     @Test
     void validSerialNumberEntryHelper() {
-        InventoryManagementApplicationController app = new InventoryManagementApplicationController();
+
         String valid = "a-xxx-xxx-xxx";
         String inValid = "A-sd@-dff-ggg";
 
@@ -36,7 +54,6 @@ class InventoryManagementApplicationControllerTest {
 
     @Test
     void validNameEntryHelper() {
-        InventoryManagementApplicationController app = new InventoryManagementApplicationController();
         int inValid = 1025;
         int valid = 25;
 
@@ -46,7 +63,6 @@ class InventoryManagementApplicationControllerTest {
 
     @Test
     void validValueEntryHelper() {
-        InventoryManagementApplicationController app = new InventoryManagementApplicationController();
         String decimalPlaces = "12345.00";
         String currencyFormat = "$100.00";
         String negativeNumbers = "-262.23";

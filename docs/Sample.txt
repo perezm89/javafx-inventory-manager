@@ -1,4 +1,4 @@
 Serial Number	Name	Value
-a-sfd-sdf-42d	car	$656.00
-s-dfs-kkj-dlk	wrench	$77.00
-a-xxx-ccc-ddd	phone	$1200.00
+a-sfd-sdf-42d	car	$625.00
+s-dfs-kkj-dlk	wrench	$773.00
+a-xxx-ccc-ddd	phone	$412.00

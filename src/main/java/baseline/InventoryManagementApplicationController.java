@@ -74,6 +74,23 @@ public class InventoryManagementApplicationController implements Initializable {
         todoTable.setEditable(true);
         todoTable.setItems(myList);
     }
+    public String inventoryItemsControlCountHelper(int size) {
+        //This function was created to separate testable logic from JavaFX controller object errorMessage
+        if(size < 1024) {
+            return "true";
+        }
+        return "Items must not exceed 1024";
+    }
+
+    public boolean inventoryItemsControlCount(int size) {
+       String result = inventoryItemsControlCountHelper(size);
+       if(!result.contentEquals("true")) {
+           displayErrorMessage(result);
+           return false;
+       }
+       return true;
+    }
+
 
     public String validSerialNumberEntryHelper(String value) throws IllegalArgumentException{
         //This function was created to separate testable logic from JavaFX controller object errorMessage
@@ -94,7 +111,7 @@ public class InventoryManagementApplicationController implements Initializable {
 
         try {
            String message = validSerialNumberEntryHelper(value);
-           if(!message.equalsIgnoreCase("")) {
+           if(!message.equalsIgnoreCase("true")) {
                displayErrorMessage(message);
                return false;
            }
@@ -184,12 +201,11 @@ public class InventoryManagementApplicationController implements Initializable {
             Item newItem = null;
             String value = valueText.getText().trim();
             String serialNumber = serialNumberText.getText().trim();
-            //make sure user can create up-to 1024 items
-            //1 List is already created prior to entering function
-            if (myList.size() < 1024
+
+            if (inventoryItemsControlCount(myList.size())
                     && validNameEntry(nameText.getText().trim().length())
-                    && validValueEntry(value)
-                    && validSerialNumberEntry(serialNumber)) {
+                    && validSerialNumberEntry(serialNumber)
+                    && validValueEntry(value)) {
                 newItem = new Item();
                 newItem.setSerialNumber(serialNumber);
                 newItem.setName(nameText.getText().trim());

@@ -15,10 +15,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class FileHandlerTest {
 
-
-
-
-
     boolean fileCompare(File file1, File file2)  throws IOException{
         Scanner scanner1 = new Scanner(file1);
         Scanner scanner2 = new Scanner(file2);
@@ -41,19 +37,19 @@ class FileHandlerTest {
         Item data = new Item();
         data.setSerialNumber("a-sfd-sdf-42d");
         data.setName("car");
-        data.setValue("$656.00");
+        data.setValue("$625.00");
         list.add(data);
 
         data = new Item();
         data.setSerialNumber("s-dfs-kkj-dlk");
         data.setName("wrench");
-        data.setValue("$77.00");
+        data.setValue("$773.00");
         list.add(data);
 
         data = new Item();
         data.setSerialNumber("a-xxx-ccc-ddd");
         data.setName("phone");
-        data.setValue("$1200.00");
+        data.setValue("$412.00");
         list.add(data);
 
         String errorMessage = null;
@@ -109,19 +105,19 @@ class FileHandlerTest {
         Item data = new Item();
         data.setSerialNumber("a-sfd-sdf-42d");
         data.setName("car");
-        data.setValue("$656.00");
+        data.setValue("$625.00");
         list.add(data);
 
         data = new Item();
         data.setSerialNumber("s-dfs-kkj-dlk");
         data.setName("wrench");
-        data.setValue("$77.00");
+        data.setValue("$773.00");
         list.add(data);
 
         data = new Item();
         data.setSerialNumber("a-xxx-ccc-ddd");
         data.setName("phone");
-        data.setValue("$1200.00");
+        data.setValue("$412.00");
         list.add(data);
 
         String errorMessage = null;
