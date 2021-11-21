@@ -124,7 +124,7 @@ public class FileHandler {
         counter++;
 
         if(!firstLine.equals("Serial Number\tName\tValue")) {
-            throw new ParseException("Invalid header", counter);
+            throw new ParseException("Invalid format", counter);
 
         }
 

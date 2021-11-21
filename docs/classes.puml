@@ -4,26 +4,46 @@
 
 class InventoryManagementApplicationController implements Initializable{
 'attributes
--descriptionTextBox : TextField
--dueDateInput : TextField
--titleName : TextField
--todolistView : ListView<?>
+-searchSerialNumberListInput :  TextField
+-nameText : TextField
+-searchNameListInput : TextField
+-serialNumberText : TextField
+-valueText : TextField
+-todoTable : TableView<Item>
+-errorMessage : Label
+-serialNumberColumn : TableColumn<Item, String>
+-valueColumn : TableColumn<Item, String>
+-nameColumn : TableColumn<Item, String>
++myList : ObservableList<Item>
 
 'methods
 +initialize(URL location, ResourceBundle resources)
-+isDescriptionDuplicate(String text) : boolean
+
 +validSerialNumberEntry(String value) : boolean
++validSerialNumberEntryHelper(String value) : String
 -isSerialNumberDuplicate(String text) : boolean
+
++validValueEntry(String value) : boolean
++validValueEntryHelper(String value) : String
+-parseToDoubleCheck(String value) : String
+
++validNameEntry(int length) : boolean
++validNameEntryHelper(int length ) : boolean
+
++inventoryItemsControlCount(int size) : boolean
++inventoryItemsControlCountHelper(int size) : String
+
 +displayErrorMessage(String message)
 +addItemClicked(ActionEvent event)
 +loadClicked(ActionEvent event)
 +saveClicked(ActionEvent event)
 +removeItemClicked(ActionEvent event)
 +clearAllClicked(ActionEvent actionEvent)
-+descriptionEditTable(TableColumn.CellEditEvent<Item, String> itemStringCellEditEvent)
-+dueDateEditTable(TableColumn.CellEditEvent<Item, String> itemStringCellEditEvent)
-+sortStatusColumn(String newValue, String oldValue)
-
++nameEditTable(TableColumn.CellEditEvent<Item, String> itemStringCellEditEvent)
++valueEditTable(TableColumn.CellEditEvent<Item, String> itemStringCellEditEvent)
++serialNumberEditTable(TableColumn.CellEditEvent<Item, String> itemStringCellEditEvent)
++searchSerialNumbersColumn(String newValue, String oldValue)
++searchNameColumn(String newValue, String oldValue)
 
 }
 
@@ -34,12 +54,15 @@ class InventoryManagementApplication extends javafx.application.Application {
 
 class FileHandler {
 'methods
-+{static}saveList(List<Item> listItems, File file, List<String> extensions) throws IOException
-+{static}loadList(File file, List<String> extensions) throws  ParseException, IOException : List<Item>
++{static}saveList(List<Item> listItems, File file, String extensions) throws IOException
++{static}loadList(File file, String extensions) throws  ParseException, IOException : List<Item>
+
 +{static}saveTsvFile(List<Item> listItems, File file)
 +{static}saveHtmlList(List<Item> listItems, File file) throws IOException
-+{static}saveJsonList(List<Item> listItems, File file) throws IOException
 -{static}generateHtmlRow(Item item) : String
++{static}saveJsonList(List<Item> listItems, File file) throws IOException
+
+
 +{static}loadTsvList(File file) throws FileNotFoundException, ParseException List<Item>
 +{static}loadHtmlList(File file) throws IOException : List<Item>
 +{static}loadJsonList(File file) : List<Item>
