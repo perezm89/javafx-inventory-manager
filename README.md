@@ -44,14 +44,27 @@ A JavaFX desktop application for managing inventory items with search, sorting, 
 
 User guide, UML diagrams, and supporting documentation are included in the `docs` folder.
 
+## Skills Demonstrated
+- Object-Oriented Programming (OOP)
+- JavaFX GUI Development
+- Data Validation
+- Unit Testing
+- File Handling
+- Gradle Build Automation
+- Git/GitHub Version Control
+
 ## Installation
 
 ```bash
 git clone https://github.com/perezm89/javafx-inventory-manager.git
 cd javafx-inventory-manager
+
 # Linux / Mac
 ./gradlew run
+```
 
-# Windows
+### Windows
+
+```cmd
 gradlew.bat run
 ```
