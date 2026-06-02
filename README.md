@@ -1,6 +1,6 @@
 # JavaFX Inventory Manager
 
-A desktop inventory management application built using JavaFX and object-oriented programming principles. The application allows users to manage inventory items through an intuitive graphical interface while demonstrating concepts such as object-oriented design, data validation, and unit testing.
+A JavaFX desktop application for managing inventory items with search, sorting, validation, and persistent data handling.
 
 ## Features
 - Add, update, and remove inventory items
@@ -27,14 +27,18 @@ A desktop inventory management application built using JavaFX and object-oriente
 ### Main Interface
 ![Main Interface](screenshots/main-interface.png)
 
+
 ### Add Inventory Item
 ![Add Inventory Item](screenshots/add-inventory-item.png)
+
 
 ### Search Inventory
 ![Search Inventory](screenshots/searching.png)
 
+
 ### Sorting Inventory Item
 ![Sorting Inventory Item](screenshots/sorting.png)
+
 
 ## Documentation
 
@@ -43,7 +47,11 @@ User guide, UML diagrams, and supporting documentation are included in the `docs
 ## Installation
 
 ```bash
-git clone <repo-url>
+git clone https://github.com/perezm89/javafx-inventory-manager.git
 cd javafx-inventory-manager
+# Linux / Mac
 ./gradlew run
+
+# Windows
+gradlew.bat run
 ```
