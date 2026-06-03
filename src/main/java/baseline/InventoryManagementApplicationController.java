@@ -1,6 +1,15 @@
-/*
- *  UCF COP3330 Fall 2021 Application Assignment 2 Solution
- *  Copyright 2021 Bryan Perez
+/**
+ * Controller for the JavaFX Inventory
+ * Management application.
+ *
+ * Handles inventory operations including:
+ * - Adding and removing items
+ * - Input validation
+ * - Search and filtering
+ * - File import/export
+ * - Table editing
+ *
+ * Author: Bryan Perez
  */
 package baseline;
 

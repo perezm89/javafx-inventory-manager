@@ -1,6 +1,10 @@
-/*
- *  UCF COP3330 Fall 2021 Application Assignment 2 Solution
- *  Copyright 2021 Bryan Perez
+/**
+ * Unit tests for FileHandler.
+ *
+ * Verifies file loading and saving
+ * functionality for supported formats.
+ *
+ * Author: Bryan Perez
  */
 package baseline;
 

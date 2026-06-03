@@ -1,6 +1,11 @@
-/*
- *  UCF COP3330 Fall 2021 Application Assignment 2 Solution
- *  Copyright 2021 Bryan Perez
+/**
+ * Represents an inventory item with
+ * a name, serial number, and value.
+ *
+ * Includes validation for serial
+ * number and value formatting.
+ *
+ * Author: Bryan Perez
  */
 package baseline;
 

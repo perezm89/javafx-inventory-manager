@@ -1,6 +1,8 @@
-/*
- *  UCF COP3330 Fall 2021 Application Assignment 2 Solution
- *  Copyright 2021 Bryan Perez
+/**
+ * Handles loading and saving inventory
+ * data in supported file formats.
+ *
+ * Author: Bryan Perez
  */
 package baseline;
 

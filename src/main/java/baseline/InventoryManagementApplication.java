@@ -1,6 +1,10 @@
-/*
- *  UCF COP3330 Fall 2021 Application Assignment 2 Solution
- *  Copyright 2021 Bryan Perez
+/**
+ * Entry point for the JavaFX Inventory
+ * Management application.
+ *
+ * Initializes and launches the primary UI.
+ *
+ * Author: Bryan Perez
  */
 package baseline;
 
